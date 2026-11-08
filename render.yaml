@@ -1,0 +1,22 @@
+# Render Blueprint for the speech server (free plan).
+# Render dashboard → New → Blueprint → pick this repo. Secrets are entered in the dashboard.
+services:
+  - type: web
+    name: kidsplay-speech-server
+    runtime: python
+    plan: free
+    rootDir: server
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: AZURE_SPEECH_KEY
+        sync: false # asked for when the Blueprint is created
+      - key: AZURE_SPEECH_REGION
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false # optional, leave empty to disable tips
+      - key: LOG_REQUESTS
+        value: "1"
